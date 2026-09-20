@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
 import subprocess
 import sys
 import unicodedata
@@ -403,9 +404,9 @@ def test_dxf_input_path_matches_artifact_path(tmp_path):
     assert json.loads(proc.stdout)["total_quantity"] == 5   # 备用 2 根单列，不计入
 
 
-REAL_ARTIFACT = Path(
-    r"C:\Users\ASUS\AppData\Local\Temp\hermes-cad\b9d82655-5d1e-41d7-8805-88e4d70645b5\drawing_structure.json"
-)
+# 可选：用环境变量 CBLSUM_REAL_ARTIFACT 指向一份真实选择集 artifact（不存在就跳过该用例）。
+# 不要把本机绝对路径写进仓库：公开仓库里这份文件当然不存在，用例会自动跳过。
+REAL_ARTIFACT = Path(os.environ["CBLSUM_REAL_ARTIFACT"]) if os.environ.get("CBLSUM_REAL_ARTIFACT") else Path("__none__")
 
 
 @pytest.mark.skipif(not REAL_ARTIFACT.exists(), reason="本机真实选择集 artifact 不存在")
