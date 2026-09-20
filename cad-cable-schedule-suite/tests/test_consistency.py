@@ -13,6 +13,7 @@ from __future__ import annotations
 import importlib.util
 import io
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -28,10 +29,24 @@ PLUGIN = ROOT / "deliverables" / "menu-plugin"
 WEB = ROOT / "deliverables" / "web-service"
 ENGINE = PLUGIN / "cad-plugin" / "cable-summary.exe"
 PLUGIN_MAIN = PLUGIN / "main.py"
-SKILL_CORE = Path.home() / ".dsh" / "skills" / "cad-cable-schedule" / "scripts" / "电缆汇总统计.py"
-REAL_ARTIFACT = Path(
-    r"C:\Users\ASUS\AppData\Local\Temp\hermes-cad\b9d82655-5d1e-41d7-8805-88e4d70645b5\drawing_structure.json"
-)
+# skill 内核的位置按优先级探测：环境变量 → 仓库内 skill/ → 本机 DSH skills 目录。
+# 公开仓库里 skill/ 与套件同级，克隆下来即可直接跑一致性测试。
+def _find_skill_core() -> Path:
+    cands = []
+    env = os.environ.get("CBLSUM_SKILL_CORE")
+    if env:
+        cands.append(Path(env))
+    cands.append(ROOT.parent / "skill" / "scripts" / "电缆汇总统计.py")
+    cands.append(Path.home() / ".dsh" / "skills" / "cad-cable-schedule" / "scripts" / "电缆汇总统计.py")
+    for cand in cands:
+        if cand.exists():
+            return cand
+    return cands[-1]
+
+
+SKILL_CORE = _find_skill_core()
+# 可选：用环境变量指向一份真实选择集 artifact（没有就跳过对应用例）——别把本机路径写进仓库
+REAL_ARTIFACT = Path(os.environ["CBLSUM_REAL_ARTIFACT"]) if os.environ.get("CBLSUM_REAL_ARTIFACT") else Path("__none__")
 VENV = ROOT / ".venv" / "Scripts" / "python.exe"
 PY = str(VENV) if VENV.exists() else sys.executable
 

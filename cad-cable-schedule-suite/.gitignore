@@ -6,3 +6,6 @@ dist/
 logs/
 out/
 *.bak
+
+# 临时脚本
+_tmp_*.py
