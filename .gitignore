@@ -1,0 +1,31 @@
+# 依赖与虚拟环境
+.venv/
+venv/
+
+# 构建产物
+dist/
+build/
+*.spec
+
+# Python 缓存
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# 运行时产物
+logs/
+out/
+*.log
+
+# 生成的二进制 / 打包物（按需自行构建或下载 Release）
+*.exe
+*.zip
+*.cuix
+*.dll
+*.pyd
+
+# 生成物：DCL 对话框文件是 GBK 编码的构建产物（由 tools/make_dcl.py 生成），不入库
+cad-cable-schedule-suite/deliverables/menu-plugin/cad-plugin/cable-summary-settings.dcl
+
+# 本机配置（含绝对路径，不入库）
+cable-summary.ini

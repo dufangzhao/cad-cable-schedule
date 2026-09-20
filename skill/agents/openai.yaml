@@ -1,0 +1,4 @@
+interface:
+  display_name: "CAD Cable Schedule"
+  short_description: "从端子数据生成电缆 Excel，并依据电缆表绘制 CAD"
+  default_prompt: "Use $cad-cable-schedule to generate or draw a cable schedule from standardized terminal data."

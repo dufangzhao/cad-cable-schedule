@@ -1,0 +1,9 @@
+# 运行网页服务
+fastapi>=0.110
+uvicorn[standard]>=0.27
+python-multipart>=0.0.9
+openpyxl>=3.1,<4
+# 仅当上传 DXF 时需要；TSV（CAD 插件路径）不需要
+ezdxf>=1.3
+# 打包成不带 CAD 的台式工具时使用
+pyinstaller>=6.0

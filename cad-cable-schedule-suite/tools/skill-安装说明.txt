@@ -1,0 +1,47 @@
+电缆表汇总 · Agent Skill 安装说明
+==================================================
+
+这是给"用 agent（DSH / Claude / Cursor 等）处理电缆表"的人用的技能包。
+与 CAD 插件、网页服务彼此独立，三者可单独分发。
+
+装法（DSH 为例）
+----------------
+把本压缩包里的 cad-cable-schedule 整个目录，放到 skills 目录下：
+
+    C:\Users\<你的用户名>\.dsh\skills\cad-cable-schedule
+
+即最终路径形如：
+
+    C:\Users\<用户名>\.dsh\skills\cad-cable-schedule\SKILL.md
+    C:\Users\<用户名>\.dsh\skills\cad-cable-schedule\scripts\...
+    C:\Users\<用户名>\.dsh\skills\cad-cable-schedule\references\...
+
+放好后重启 agent 会话，skill 目录里会出现 cad-cable-schedule。
+
+依赖
+----
+skill 的脚本需要 Python 3.9+ 与两个库：
+
+    python -m pip install -r requirements.txt
+
+（内容：openpyxl、regex。若只做"选中汇总"这一个用途，openpyxl 就够了。）
+
+它能做什么
+----------
+1) extract  端子图 / 端子表.xlsx  →  按 K/AK/TK 分类的电缆表.xlsx
+2) render   电缆 Excel  →  编译绘图计划并经 cad-drawing 画成 CAD 电缆表
+3) survey   用户在 CAD 里选中的电缆表  →  按"型号/芯数/截面 三项全等"汇总计数（长度相加）  →  采购用 Excel
+
+其中 survey 依赖 cad-drawing skill 提供读图服务（scope=selected）。
+若只想要汇总功能又不想用 agent，请改用"CAD 插件"，那个不需要 agent。
+
+
+与本包里其他交付物的关系
+------------------------
+三者共用同一份汇总内核（型号+芯数+截面三项一致即合并），但各自打包、各自分发：
+
+    CAD 插件        只要 AutoCAD，不联网、不装 Python
+    网页服务         服务端跑 Python，浏览器上传
+    本 skill         给 agent 用，能力最全（含端子图解析与出图）
+
+改汇总口径时请改 skill 侧 scripts/电缆汇总统计.py，再同步到另外两个交付物。
